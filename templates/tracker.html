@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='tracker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tracker.css') }}">
+
+</head>
+<body>
+    <h1>Activity Tracker Calendar</h1>
+    <div class="calendar-controls">
+        <button onclick="previous()">Previous</button>
+        <span id="monthAndYear"></span>
+        <button onclick="next()">Next</button>
+    </div>
+    <table id="calendar">
+        <thead>
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody id="calendar-body">
+            <!-- Calendar dates will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script src="{{ url_for('static', filename='calendar.js') }}"></script>
+    
+</body>
+</html>

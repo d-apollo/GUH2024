@@ -4,6 +4,30 @@ from flask import Flask, render_template, request, redirect, url_for,session
 import time
 import openai
 from dotenv import load_dotenv
+from chatgp import fitness_advice
+from chatgp import dietary_advice
+
+
+import calendar
+from datetime import datetime
+import json
+
+
+
+
+
+
+
+week_data = {
+    "day_1": ["", "", ""],  # Monday
+    "day_2": ["", "", ""],  # Tuesday
+    "day_3": ["", "", ""],  # Wednesday
+    "day_4": ["", "", ""],  # Thursday
+    "day_5": ["", "", ""],  # Friday
+    "day_6": ["", "", ""],  # Saturday
+    "day_7": ["", "", ""],  # Sunday
+}
+
 
 # Load environment variables
 load_dotenv()
@@ -13,8 +37,9 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-
-
+day_statuses = {}
+data = {
+    f'day_{i+1}': ['', '', ''] for i in range(21)}
 
 # Global dictionary to hold session data for the week
 
@@ -45,6 +70,8 @@ def display_input_bars(day):
 @app.route('/')
 def frontpage():
     return render_template('frontpage.html')
+
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -82,12 +109,32 @@ def home():
         # Handle form submission, if any
         # e.g., save data or process it
         pass
-    return render_template('home.html')
+    return render_template('home.html',data=week_data)
 
+@app.route('/update', methods=['POST'])
+def update():
+    day = request.form['day']
+    values = request.form.getlist('values[]')
+    
+    # Update the global dictionary with the new values
+    week_data[day] = values
+    
+    return 'Success', 200
 
-@app.route('/tracker', methods=['GET'])
+# Global dictionary to store calendar values for each day
+calendar_values = {
+    1: 'green',
+    2: 'yellow',
+    3: 'red',
+    4: 'gray',
+    5: 'green',
+    # Add other days as needed...
+}
+
+@app.route('/tracker')
 def tracker():
-    return render_template('tracker.html')
+    return render_template('tracker.html', calendar_values=calendar_values)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -99,8 +146,8 @@ def login():
 def suggestions():
     if request.method == 'POST':
         user_input = request.form['user_input']
-        fitness_response = get_fitness_advice(user_input)
-        dietary_response = get_dietary_advice(user_input)
+        fitness_response = fitness_advice(user_input)
+        dietary_response = dietary_advice(user_input)
         return render_template('suggestions.html', fitness_advice=fitness_response, dietary_advice=dietary_response)
     return render_template('suggestions.html', fitness_advice=None, dietary_advice=None)
 
@@ -111,25 +158,9 @@ def update_weekday():
     week_data[day] = inputs
     return redirect(url_for('setup1'))
 
-def get_fitness_advice(user_input):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Provide concise fitness advice based on the schedule of workouts you will receive."},
-            {"role": "user", "content": user_input}
-        ]
-    )
-    return response['choices'][0]['message']['content']
 
-def get_dietary_advice(user_input):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Provide concise dietary advice based on the schedule of workouts you will receive."},
-            {"role": "user", "content": user_input}
-        ]
-    )
-    return response['choices'][0]['message']['content']
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

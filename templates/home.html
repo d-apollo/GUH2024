@@ -3,36 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Home - Day Inputs</title>
+    <style>
+        body{align-items:center;justify-content: center;}
+        .box {.box {
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #000000;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  } }
+        .buttons { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .day-container { display: none; }
+        .active { display: block; }
+    </style>
 </head>
 <body>
 
-    <header>
-        <h1>Welcome to Your Home Page!</h1>
-    </header>
+<h1>Home - Day Inputs</h1>
+<div class="buttons">
+    <button onclick="changeDay(-1)">Previous</button>
+    <button onclick="changeDay(1)">Next</button>
+</div>
 
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('tracker') }}">Tracker</a></li>
-            <li><a href="{{ url_for('suggestions') }}">Suggestions</a></li>
-            <li><a href="{{ url_for('login') }}">Logout</a></li>
-        </ul>
-    </nav>
+{% set days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
 
-    <section>
-        <h2>Your Week's Schedule</h2>
-        <p>Review your exercise plan and track your progress.</p>
-        <a href="{{ url_for('setup1') }}">Update Your Plan</a>
-    </section>
+{% for i in range(7) %}
+    <div id="day{{ i+1 }}" class="day-container {{ 'active' if i == 0 else '' }}">
+        <h3>{{ days_of_week[i] }}</h3>
+        <div style="border: 1px solid #ccc; padding: 15px; background-color: #f9f9f9; border-radius: 5px;width: 100px;">
+            <input type="text" style="display: block; margin-bottom: 10px;" placeholder="Input 1">
+            <input type="text" style="display: block; margin-bottom: 10px;" placeholder="Input 2">
+            <input type="text" style="display: block;" placeholder="Input 3">
+          </div>
+    </div>
+{% endfor %}
 
-    <footer>
-        <p>&copy; 2024 Your Fitness App</p>
-    </footer>
-    <form action="{{ url_for('home') }}" method="POST">
-        <button type="submit">Next</button>
-    </form>
-    
+<script>
+    let currentDay = 0;
+
+    function changeDay(direction) {
+        // Save current values
+        const dayKey = `day${currentDay+1}`;
+        const values = [
+            document.getElementById(`input${currentDay+1}_1`).value,
+            document.getElementById(`input${currentDay+1}_2`).value,
+            document.getElementById(`input${currentDay+1}_3`).value
+        ];
+
+        // Update Flask with the new values
+        fetch('/update', {
+            method: 'POST',
+            body: new URLSearchParams({
+                'day': dayKey,
+                'values[]': values
+            }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        // Hide current day and show the next one
+        document.getElementById(`day${currentDay+1}`).classList.remove('active');
+        currentDay = (currentDay + direction + 7) % 7;
+        document.getElementById(`day${currentDay+1}`).classList.add('active');
+    }
+</script>
 
 </body>
 </html>
