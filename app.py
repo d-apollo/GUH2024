@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 import numpy as np
-import pandas as pd
+
 
 from chatgp import fitness_advice 
 from chatgp import dietary_advice
@@ -12,7 +12,7 @@ st.set_page_config(page_title='BEEFIT', page_icon= '🏃‍♀️', layout="cent
 
 user_input = "my back hurt my back broke"
 
-def stream_data():
+def stream_data(stream):
     for word in stream.split(" "):
         yield word + " "
         time.sleep(0.025)
@@ -199,13 +199,14 @@ def suggestions():
         time.sleep(2)
     st.success("Your Personalised Plan:")
 
-    stream = fitness_advice(user_input)
+    f_stream = fitness_advice(user_input)
+    
     st.header("Suggestions for your Fitness Routine")
-    st.write_stream(stream_data)
+    st.write_stream(stream_data(f_stream))
     st.divider()
-    stream = dietary_advice(user_input)
+    d_stream = dietary_advice(user_input)
     st.header("Suggestions for your Dietary Plan")
-    st.write_stream(stream_data)
+    st.write_stream(stream_data(d_stream))
 
 # pg = st.navigation([st.Page("home.py", title="First Page", icon=""),st.Page(page3, title="Second Page")])
 
