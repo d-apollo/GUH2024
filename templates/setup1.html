@@ -21,7 +21,6 @@
         </select>
         <br><br>
 
-        <!-- Dynamically display input fields -->
         {% for input_name, input_value in input_fields %}
             <label for="{{ input_name }}">Input {{ loop.index }}:</label>
             <input type="text" id="{{ input_name }}" name="{{ input_name }}" value="{{ input_value or '' }}">

@@ -1,38 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suggestions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Suggestions</title>
+   <style>
+       /* Set background color of the whole page */
+       body {
+           background-color: #5e17eb;
+           color: #ffffff;
+           font-family: Arial, sans-serif;
+           margin: 0;
+           padding: 0;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           min-height: 100vh;
+       }
+
+       /* Center header and apply margin */
+       header {
+           text-align: center;
+           margin-top: 20px;
+           font-size: 2em;
+           overflow: hidden;
+           white-space: nowrap;
+           animation: typing 2s steps(30, end), blink 0.5s step-end infinite alternate;
+       }
+
+       /* Typing effect for header */
+       @keyframes typing {
+           from { width: 0; }
+           to { width: 100%; }
+       }
+       
+       @keyframes blink {
+           50% { border-color: transparent; }
+       }
+
+       /* Personalised Plan box (static text, no typing effect) */
+       .personalised-plan {
+           background-color: #a48be0; /* lighter purple */
+           color: #ffffff;
+           padding: 10px 20px;
+           border-radius: 8px;
+           font-size: 18px;
+           margin-top: 10px;
+       }
+
+       /* Form section on top */
+       form {
+           background-color: #ffffff;
+           padding: 20px;
+           border-radius: 8px;
+           width: 80%;
+           max-width: 600px;
+           color: #333333;
+           margin-top: 30px;
+       }
+
+       label {
+           font-weight: bold;
+           display: block;
+           margin-bottom: 8px;
+       }
+
+       textarea {
+           width: 100%;
+           height: 100px;
+           margin-bottom: 15px;
+           padding: 10px;
+           border-radius: 4px;
+           border: 1px solid #ddd;
+           resize: vertical;
+       }
+
+       /* Style the button */
+       button {
+           background-color: #ffecb3; /* warmer yellow */
+           color: #333333;
+           padding: 10px 20px;
+           border: none;
+           border-radius: 4px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: background-color 0.3s ease;
+       }
+
+       /* Button hover effect */
+       button:hover {
+           background-color: #ffe699; /* lighter yellowish shade on hover */
+       }
+
+       /* Container for side-by-side layout of Fitness and Dietary Advice */
+       .advice-wrapper {
+           display: flex;
+           justify-content: space-between;
+           width: 80%;
+           max-width: 1200px;
+           margin-top: 30px;
+       }
+
+       /* Style for Fitness and Dietary advice sections */
+       .advice-section {
+           background-color: #ffffff;
+           color: #333333;
+           padding: 20px;
+           border-radius: 8px;
+           width: 48%;
+           text-align: center;
+           font-size: 16px;
+       }
+       
+       /* Additional styles for advice titles */
+       .advice-section h2 {
+           color: #5e17eb;
+           margin-bottom: 10px;
+       }
+
+       /* Typing effect for advice content */
+       .typewriter p {
+           overflow: hidden;
+           white-space: nowrap;
+           border-right: 0.15em solid #333;
+           animation: typing 1s steps(40, end), blink 0.5s step-end infinite alternate;
+       }
+   </style>
 </head>
 <body>
 
-    <header>
-        <h1>Fitness and Dietary Suggestions</h1>
-    </header>
+   <header>
+       BEE.ai Suggestions...
+   </header>
 
-    <section>
-        <form method="POST" action="{{ url_for('suggestions') }}">
-            <label for="user_input">Enter your workout schedule:</label>
-            <textarea id="user_input" name="user_input" placeholder="Enter your workout details..." required></textarea>
-            <button type="submit">Get Suggestions</button>
-        </form>
-    </section>
+   <!-- Personalised Plan Box -->
+   <div class="personalised-plan">
+       Your Personalised Plan...
+   </div>
 
-    {% if fitness_advice %}
-    <section>
-        <h2>Fitness Advice</h2>
-        <p>{{ fitness_advice }}</p>
-    </section>
-    {% endif %}
+   <!-- Form Section -->
+   <form method="POST" action="{{ url_for('suggestions') }}">
+       <label for="user_input">Enter your workout schedule:</label>
+       <textarea id="user_input" name="user_input" placeholder="Enter your workout details..." required></textarea>
+       <button type="submit">Get Suggestions</button>
+   </form>
 
-    {% if dietary_advice %}
-    <section>
-        <h2>Dietary Advice</h2>
-        <p>{{ dietary_advice }}</p>
-    </section>
-    {% endif %}
+   <!-- Fitness and Dietary Advice Section (Side by Side) -->
+   <div class="advice-wrapper">
+       <!-- Fitness Advice Section -->
+       <div class="advice-section typewriter">
+           {% if fitness_advice %}
+           <h2>Fitness Advice</h2>
+           <p>{{ fitness_advice }}</p>
+           {% endif %}
+       </div>
+
+       <!-- Dietary Advice Section -->
+       <div class="advice-section typewriter">
+           {% if dietary_advice %}
+           <h2>Dietary Advice</h2>
+           <p>{{ dietary_advice }}</p>
+           {% endif %}
+       </div>
+   </div>
 
 </body>
 </html>

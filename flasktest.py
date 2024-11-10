@@ -71,6 +71,17 @@ def display_input_bars(day):
 def frontpage():
     return render_template('frontpage.html')
 
+@app.route('/store_data', methods=['POST'])
+def store_data():
+    global values
+    day = request.form['day']
+    values = request.form.getlist('values[]')
+    
+    # Process or store the values as needed
+    print(f"Day: {day}, Values: {values}")
+    
+    # Respond with success
+    return jsonify({"status": "success", "data": {"day": day, "values": values}})
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -98,9 +109,13 @@ def setup1():
 
 @app.route('/setup2', methods=['GET', 'POST'])
 def setup2():
+    global budget
+    global dietary
     if request.method == 'POST':
         # Handle form data
-        return redirect(url_for('next_page'))  # Replace 'next_page' with actual page
+        return redirect(url_for('home'))  # Replace 'next_page' with actual page
+    dietary = request.form.get('dietary')  # Dietary requirements text
+    budget = request.form.get('budget') 
     return render_template('setup2.html')
 
 @app.route('/home', methods=['GET', 'POST'])
@@ -144,12 +159,20 @@ def login():
 
 @app.route('/suggestions', methods=['GET', 'POST'])
 def suggestions():
+    fitness_response = None
+    dietary_response = None
+
     if request.method == 'POST':
-        user_input = request.form['user_input']
+        user_input = request.form['user_input']  # Capture the input from the textarea
+
+        # Get advice based on the user's input
         fitness_response = fitness_advice(user_input)
         dietary_response = dietary_advice(user_input)
-        return render_template('suggestions.html', fitness_advice=fitness_response, dietary_advice=dietary_response)
-    return render_template('suggestions.html', fitness_advice=None, dietary_advice=None)
+
+    return render_template('suggestions.html', 
+                           fitness_advice=fitness_response, 
+                           dietary_advice=dietary_response)
+
 
 @app.route('/update_weekday', methods=['POST'])
 def update_weekday():

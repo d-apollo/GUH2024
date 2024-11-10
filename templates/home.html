@@ -5,17 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Day Inputs</title>
     <style>
-        body{align-items:center;justify-content: center;}
-        .box {.box {
-    padding: 15px;
-    margin: 10px 0;
-    border: 1px solid #000000;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-  } }
-        .buttons { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .day-container { display: none; }
-        .active { display: block; }
+        body {
+            background-color: #5e17eb; /* Purple background */
+            font-family: 'Futura', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .day-container {
+            display: none;
+            text-align: center;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .box {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #000;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        input {
+            display: block;
+            margin-bottom: 10px;
+            width: 90%;
+            padding: 8px;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav-buttons button {
+            margin: 0 10px;
+        }
     </style>
 </head>
 <body>
@@ -32,12 +79,22 @@
     <div id="day{{ i+1 }}" class="day-container {{ 'active' if i == 0 else '' }}">
         <h3>{{ days_of_week[i] }}</h3>
         <div style="border: 1px solid #ccc; padding: 15px; background-color: #f9f9f9; border-radius: 5px;width: 100px;">
-            <input type="text" style="display: block; margin-bottom: 10px;" placeholder="Input 1">
-            <input type="text" style="display: block; margin-bottom: 10px;" placeholder="Input 2">
-            <input type="text" style="display: block;" placeholder="Input 3">
+            <input type="text" style="display: block; margin-bottom: 10px;" placeholder="Input 1" id="input{{ i+1 }}_1">
+            <input type="text" style="display: block; margin-bottom: 10px;" placeholder="Input 2" id="input{{ i+1 }}_2">
+            <input type="text" style="display: block;" placeholder="Input 3" id="input{{ i+1 }}_3">
           </div>
     </div>
 {% endfor %}
+
+<form action="/suggestions" method="GET">
+    <button type="submit">Suggestions</button>
+</form>
+<form action="/tracker" method="GET">
+    <button type="submit">Tracker</button>
+</form>
+
+
+</body>
 
 <script>
     let currentDay = 0;
@@ -69,6 +126,4 @@
         document.getElementById(`day${currentDay+1}`).classList.add('active');
     }
 </script>
-
-</body>
 </html>
