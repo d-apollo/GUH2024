@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggestions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Fitness and Dietary Suggestions</h1>
+    </header>
+
+    <section>
+        <form method="POST" action="{{ url_for('suggestions') }}">
+            <label for="user_input">Enter your workout schedule:</label>
+            <textarea id="user_input" name="user_input" placeholder="Enter your workout details..." required></textarea>
+            <button type="submit">Get Suggestions</button>
+        </form>
+    </section>
+
+    {% if fitness_advice %}
+    <section>
+        <h2>Fitness Advice</h2>
+        <p>{{ fitness_advice }}</p>
+    </section>
+    {% endif %}
+
+    {% if dietary_advice %}
+    <section>
+        <h2>Dietary Advice</h2>
+        <p>{{ dietary_advice }}</p>
+    </section>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup 1</title>
+</head>
+<body>
+    <h1>Setup 1: Enter Workout Details for {{ day }}</h1>
+    <form method="POST">
+        <!-- Day selection dropdown -->
+        <label for="day">Select Day:</label>
+        <select name="day" id="day">
+            <option value="Mon" {% if day == 'Mon' %}selected{% endif %}>Monday</option>
+            <option value="Tue" {% if day == 'Tue' %}selected{% endif %}>Tuesday</option>
+            <option value="Wed" {% if day == 'Wed' %}selected{% endif %}>Wednesday</option>
+            <option value="Thur" {% if day == 'Thur' %}selected{% endif %}>Thursday</option>
+            <option value="Fri" {% if day == 'Fri' %}selected{% endif %}>Friday</option>
+            <option value="Sat" {% if day == 'Sat' %}selected{% endif %}>Saturday</option>
+            <option value="Sun" {% if day == 'Sun' %}selected{% endif %}>Sunday</option>
+        </select>
+        <br><br>
+
+        <!-- Dynamically display input fields -->
+        {% for input_name, input_value in input_fields %}
+            <label for="{{ input_name }}">Input {{ loop.index }}:</label>
+            <input type="text" id="{{ input_name }}" name="{{ input_name }}" value="{{ input_value or '' }}">
+            <br><br>
+        {% endfor %}
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>

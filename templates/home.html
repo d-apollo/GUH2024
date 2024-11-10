@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to Your Home Page!</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('tracker') }}">Tracker</a></li>
+            <li><a href="{{ url_for('suggestions') }}">Suggestions</a></li>
+            <li><a href="{{ url_for('login') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Your Week's Schedule</h2>
+        <p>Review your exercise plan and track your progress.</p>
+        <a href="{{ url_for('setup1') }}">Update Your Plan</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Your Fitness App</p>
+    </footer>
+    <form action="{{ url_for('home') }}" method="POST">
+        <button type="submit">Next</button>
+    </form>
+    
+
+</body>
+</html>
